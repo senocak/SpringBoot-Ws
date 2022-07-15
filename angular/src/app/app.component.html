@@ -1,0 +1,67 @@
+<section class="form login" *ngIf="isLoginPage">
+  <header style="color: white">Realtime Chat App</header>
+  <form autocomplete="off">
+    <div class="error-text"></div>
+    <div class="field input">
+      <input type="text" name="username" placeholder="Enter your username"
+             required [(ngModel)]="username">
+    </div>
+    <div class="field button">
+      <input type="submit" name="submit" value="Continue to Chat" (click)="login()">
+    </div>
+  </form>
+</section>
+
+<section class="users" *ngIf="isUsersPage">
+  <header>
+    <div class="content">
+      <img src="{{profileImage}}" alt="">
+      <div class="details">
+        <span style="color: white">{{username}}</span>
+      </div>
+    </div>
+    <a class="logout" (click)="logout()">Logout</a>
+  </header>
+  <div class="search input field">
+    <span class="text">Select an user to start chat</span>
+    <input type="text" placeholder="Enter name to search..." class="show" [(ngModel)]="search">
+  </div>
+  <div class="users-list">
+    <div *ngFor="let user of onlineUsers">
+      <a (click)="openMessageBox(user)" *ngIf="user.includes(search)">
+        <div class="content">
+          <img src="{{profileImage}}" alt="">
+          <div class="details">
+            <span style="color: white">{{user}}</span>
+          </div>
+        </div>
+        <div class="status-dot "><i class="fas fa-circle"></i></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="chat-area" *ngIf="isChatPage">
+  <header>
+    <i class="fas fa-arrow-left" (click)="openUsersPage()" style="color: white"></i>
+    <img src="{{profileImage}}" alt="">
+    <div class="details">
+      <span style="color: white">{{username}} -> {{ to }}</span>
+    </div>
+  </header>
+  <div class="chat-box" #scroll>
+    <div *ngFor="let message of privateMessages">
+      <div class="chat outgoing" [ngClass]="{'outgoing': message.from == username, 'incoming': message.to == username }">
+        <div class="details">
+          <p>{{message.content}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="typing-area">
+    <input type="text" class="incoming_id" name="incoming_id" value="896817886" hidden="">
+    <input type="text" name="message" class="input-field" placeholder="Type a message here..."
+           autocomplete="off" [(ngModel)]="message">
+    <button (click)="sendMessage()"><i class="fab fa-telegram-plane"></i></button>
+  </div>
+</section>
